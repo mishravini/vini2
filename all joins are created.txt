@@ -1,0 +1,177 @@
+CREATE TABLE Patients (
+    PatientID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Age INT,
+    Gender VARCHAR(10)
+);
+
+INSERT INTO Patients (PatientID, Name, Age, Gender) VALUES 
+(1, 'Alice Johnson', 30, 'Female'),
+(2, 'Bob Smith', 45, 'Male');
+
+CREATE TABLE Doctors (
+    DoctorID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Specialty VARCHAR(100)
+) ;
+
+INSERT INTO Doctors (DoctorID, Name, Specialty) VALUES 
+(101, 'Dr. Brown', 'Cardiology'),
+(102, 'Dr. Green', 'Neurology');
+
+
+CREATE TABLE Appointments (
+    AppointmentID INT PRIMARY KEY,
+    PatientID INT,
+    DoctorID INT,
+    AppointmentDate DATE,
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+INSERT INTO Appointments (AppointmentID, PatientID, DoctorID, AppointmentDate) VALUES 
+(201, 1, 101, '2024-03-10'),
+(202, 1, 102, '2024-03-12'),
+(203, 2, 101, '2024-03-15');
+select * from Appointments;
+CREATE TABLE Prescriptions (
+    PrescriptionID INT PRIMARY KEY,
+    AppointmentID INT,
+    Medicine VARCHAR(100),
+    Dosage VARCHAR(50),
+    FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID)
+);
+INSERT INTO Prescriptions (PrescriptionID, AppointmentID, Medicine, Dosage) VALUES 
+(301, 201, 'Aspirin', '100mg'),
+(302, 202, 'Ibuprofen', '200mg'),
+(303, 203, 'Metoprolol', '50mg');
+
+select * from patients cross join Appointments;
+select AppointmentID,patientID,DoctorID,AppointmentDate from Appointments;
+select * from patients
+join doctors on pateints.patientID = doctors.doctorid
+join Appointments on doctors.doctorID = Appointment.AppointmentID
+join prescriptions on appointments.AppointmentID = prescriptionID;
+
+SELECT 
+    a.AppointmentID, 
+    a.PatientID, 
+    a.DoctorID, 
+    a.AppointmentDate, 
+    p.Name AS PatientName
+FROM Appointments a
+INNER JOIN Patients p ON a.PatientID = p.PatientID;
+
+
+select 
+a.AppointmentID, 
+    a.PatientID, 
+    a.DoctorID, 
+    a.AppointmentDate, 
+    p.Name AS PatientName
+ FROM Appointments a
+left join Patients p ON a.PatientID = p.PatientID;
+
+select 
+a.AppointmentID,
+a.patientID,
+a.DoctorID,
+a.AppointmentDate,
+p.Name AS PatientName
+from appointments a 
+right join patients p on a.patientID = p.patientID;
+
+
+select patientID,doctorID from patients,doctors where patients.patientID = doctors.doctorID;
+join appointmentID,prescriptionID from appointment,prescirption where appointment .appointmentID = prescription.prescriptionID;
+
+SELECT 
+    patients.patientID, 
+    doctors.doctorID, 
+    appointments.appointmentID, 
+    prescriptions.prescriptionID
+from  patients
+inner join appointments ON patients.patientID = appointments.patientID
+inner join doctors ON appointments.doctorID = doctors.doctorID
+inner join prescriptions ON appointments.appointmentID = prescriptions.appointmentID LIKE '%pa%';
+
+
+SELECT 
+    patients.name AS patient_name,
+    patients.age,
+    patients.gender,
+    doctors.name AS doctor_name,
+    appointments.appointment_date,
+    prescriptions.medicine,
+    prescriptions.dosage
+FROM patients 
+LEFT JOIN appointments ON patients.patientID= appointments.patientID
+LEFT JOIN doctors ON appointments.doctorID = doctors.doctorID
+LEFT JOIN prescriptions ON appointments.appointmentID = prescriptions.appointmentID
+where prescriptions.medicine='Aspirin';
+
+select 
+ patients.patientID,
+ appointments.appointmentID,
+ prescriptions.prescriptionID
+from patients 
+join appointments on patients.patientID = appointments.patientID
+JOIN Prescriptions ON appointments.appointmentID = prescriptions.appointmentID;
+
+SELECT 
+    patients.name AS patientname,
+    doctors.name AS doctorname,
+    appointments.appointmentdate,
+    prescriptions.medicine
+FROM patients
+FULL OUTER JOIN appointments ON patients.patientID= appointments.patientID
+FULL OUTER JOIN doctors ON appointments.doctorID = doctors.doctorID
+FULL OUTER JOIN prescriptions ON appointments.appointmentID = prescriptions.appointmentID;
+
+select 
+patients.name as patientname,
+doctors.name as doctorname,
+appointments.appointmentdate,
+prescriptions.medicine
+from patients
+join appointments on patients.patientID = appointments.patientID
+join doctors on appointments.doctorID = doctors.doctorID 
+join prescriptions on appointments.appointmentID = prescriptions.appointmentID;
+
+select 
+patients.patientID,
+doctors.doctorID
+from patients 
+natural join appointments
+natural join doctors;
+SELECT 
+    patients.patientID, 
+    doctors.doctorID
+FROM patients
+NATURAL JOIN appointments
+NATURAL JOIN doctors;
+
+select 
+patients.patient.gender,
+doctors.doctor.name,
+prescriptions.prescriptionID
+
+from patients
+natural join appointments
+natural join doctors
+natural join prescriptions;
+
+SELECT 
+    patients.gender,
+    doctors.name AS doctor_name,
+    prescriptions.prescriptionID
+FROM patients
+NATURAL JOIN appointments
+NATURAL JOIN doctors
+NATURAL JOIN prescriptions;
+
+SELECT prescriptions.prescriptionID, prescriptions.AppointmentID
+FROM prescriptions
+join appointments ON prescriptions.AppointmentID = appointments.AppointmentID;
+
+
+
